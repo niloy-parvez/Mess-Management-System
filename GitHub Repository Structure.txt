@@ -1,0 +1,15 @@
+mess-management-system/
+│
+├── frontend/              # React + Tailwind
+├── backend/               # Node.js + Express
+├── database/
+│   └── schema.sql
+├── docs/
+│   ├── SRS.pdf
+│   ├── API.md
+│   ├── ERD.png
+│   └── Architecture.png
+├── screenshots/
+├── README.md
+├── LICENSE
+└── .gitignore

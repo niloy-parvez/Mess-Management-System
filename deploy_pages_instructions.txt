@@ -1,0 +1,97 @@
+Deployment Instructions — Mess Management System (GitHub Pages)
+
+Summary of local changes (already in this workspace):
+- Modified: frontend/vite.config.ts
+  - Set base to '/Mess-Management-System/' for production builds
+- Created: .github/workflows/deploy-pages.yml
+  - GitHub Actions workflow to build frontend and deploy frontend/dist to GitHub Pages
+- Created: frontend/dist/404.html (copied from dist/index.html for SPA fallback)
+
+Files to commit & push to your repository (recommended):
+- frontend/vite.config.ts
+- .github/workflows/deploy-pages.yml
+
+IMPORTANT: Do NOT commit frontend/dist to the repo. The workflow will build dist on the Actions runner and publish it.
+
+Step-by-step: commit & push the changes
+(Adjust branch name if your default branch is not 'main')
+
+1) Inspect the changes locally:
+   git status
+   git diff frontend/vite.config.ts
+   git diff .github/workflows/deploy-pages.yml
+
+2) If your repo is not initialized locally, initialize and add remote (only if needed):
+   git init
+   git remote add origin <git-remote-url>
+
+3) Create a branch or use main:
+   git checkout -b main  # or 'git checkout main' if main exists
+
+4) Stage and commit the files:
+   git add frontend/vite.config.ts .github/workflows/deploy-pages.yml
+   git commit -m "ci: add GitHub Pages deploy workflow and set Vite base for GitHub Pages"
+
+5) Push to GitHub (replace origin/main if your branch differs):
+   git push -u origin main
+
+Add repository secret (must be done in GitHub UI)
+-----------------------------------------------
+The Actions workflow expects a repository secret named: VITE_API_BASE_URL
+Set this to the production backend base URL (ending with /api), for example:
+  https://api.mydomain.com/api
+
+GitHub UI steps:
+- Go to your repository on GitHub
+- Settings → Secrets and variables → Actions → New repository secret
+- Name: VITE_API_BASE_URL
+- Value: https://<your-production-backend-domain>/api
+- Save secret
+
+Configure GitHub Pages source
+-----------------------------
+Ensure Pages is set to use GitHub Actions as the source:
+- Go to Settings → Pages → Build and deployment
+- Source: GitHub Actions
+
+Trigger the workflow
+--------------------
+- The workflow triggers on push to main OR master and on workflow_dispatch
+- After pushing, go to Actions → Deploy Frontend to GitHub Pages → select the run
+- Monitor the steps: checkout → setup-node → npm ci → type-check → build → configure-pages → upload-pages-artifact → deploy-pages
+
+Verification after workflow completes
+-------------------------------------
+1) Check the workflow run completed successfully (green check).
+2) Visit https://<username>.github.io/<repository-name>/
+   For this repo: https://niloy-parvez.github.io/Mess-Management-System/
+3) Verify root loads the app. For SPA route testing, verify:
+   - /login
+   - /register
+   - /dashboard
+   NOTE: Authentication requires your backend to be deployed and VITE_API_BASE_URL secret set to the backend URL.
+
+If you see 404 or asset 404 errors after deployment
+---------------------------------------------------
+- Confirm the workflow used NODE_ENV=production and that built dist/index.html references '/Mess-Management-System/assets/...'.
+- Confirm repository Pages setting is "GitHub Actions" and that the published site path matches the repository name.
+- If assets 404, check the action logs for the build step and the deployed files list.
+
+If backend is not deployed
+--------------------------
+- The frontend app will load but API calls will fail (CORS/network error). Do not expose SUPABASE_SERVICE_ROLE_KEY in frontend. Provide VITE_API_BASE_URL pointing to a deployed backend to enable auth/API behavior.
+
+If you want me to run the next verification steps
+------------------------------------------------
+Option A (recommended): You push the changes and add the secret, then tell me the Actions run URL or the run status; I will analyze the run logs and verify the live site.
+
+Option B: Grant push access or provide a remote writeable URL and I can push the changes and monitor the workflow end-to-end.
+
+Contact / Next steps
+--------------------
+After you push and add the secret, provide the GitHub Actions run link (or tell me it completed) and I will:
+- Verify the Pages publish succeeded
+- Test the root and SPA routes
+- Report any remaining issues and fix small problems in the workflow/config if needed
+
+End of instructions.

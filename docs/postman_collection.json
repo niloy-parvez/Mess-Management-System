@@ -1,0 +1,68 @@
+{
+  "info": {
+    "_postman_id": "mess-management-system",
+    "name": "Mess Management API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","health"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Password123!\",\n  \"name\": \"Admin User\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","auth","register"]
+        }
+      }
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"Password123!\"\n}\n" },
+        "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+      }
+    },
+    {
+      "name": "Members - List",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/members?search=&page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api","members"] }
+      }
+    },
+    {
+      "name": "Meals - List",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{token}}" } ],
+        "url": { "raw": "{{baseUrl}}/api/meals?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api","meals"] }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000" },
+    { "key": "token", "value": "" }
+  ]
+}

@@ -1,0 +1,68 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+backend/.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+
+# IDE specific files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# OS specific
+Thumbs.db
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# IDE settings
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+
+# Docker
+docker-compose.override.yml
+
+# Temporary files
+tmp/
+temp/
+
+# Cache
+.cache/
+.eslintcache
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Secrets / local tokens
+token.txt
+*.pem

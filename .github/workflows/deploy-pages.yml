@@ -1,0 +1,84 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch: {}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: 'pages-deploy-${{ github.ref }}'
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Type-check frontend
+        working-directory: frontend
+        run: npm run type-check
+
+      - name: Validate production API secret
+        if: ${{ github.event_name == 'push' }}
+        working-directory: frontend
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        run: |
+          if [ -z "$VITE_API_BASE_URL" ]; then
+            echo "ERROR: Missing repository secret VITE_API_BASE_URL. Set it in Settings -> Secrets -> Actions." >&2
+            exit 1
+          else
+            echo "Found VITE_API_BASE_URL (redacted)"
+          fi
+
+      - name: Build frontend
+        working-directory: frontend
+        env:
+          NODE_ENV: production
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        run: npm run build
+
+      - name: Ensure 404 fallback
+        run: |
+          if [ -f frontend/dist/index.html ]; then
+            cp frontend/dist/index.html frontend/dist/404.html
+          fi
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: frontend/dist
+
+  deploy:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    concurrency:
+      group: 'pages-deploy-${{ github.ref }}'
+      cancel-in-progress: true
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
