@@ -77,98 +77,139 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Total Members</p>
-              <p className="text-3xl font-bold text-blue-600">{stats?.totalMembers || 0}</p>
-              <p className="text-xs text-gray-500 mt-2">{stats?.activeMembers || 0} active</p>
-            </div>
-            <Users size={40} className="text-blue-200" />
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
+          <p className="text-sm text-gray-500">Overview of mess statistics and recent activity</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="text-right">
+            <p className="text-xs text-gray-500">Current Meal Rate</p>
+            <p className="text-lg font-semibold">{stats?.currentMealRate ? `৳${Number(stats.currentMealRate).toFixed(2)}` : "—"}</p>
           </div>
-        </Card>
-
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Today&apos;s Meals</p>
-              <p className="text-3xl font-bold text-indigo-600">{stats?.todayMeals || 0}</p>
-              <p className="text-xs text-gray-500 mt-2">Current meal count</p>
-            </div>
-            <TrendingUp size={40} className="text-indigo-200" />
+          <div className="text-right">
+            <p className="text-xs text-gray-500">Approved Market (This month)</p>
+            <p className="text-lg font-semibold">{stats?.approvedMarketCost ? `৳${Number(stats.approvedMarketCost).toFixed(2)}` : `৳${Number(stats?.totalMarketCost || 0).toFixed(2)}`}</p>
           </div>
-        </Card>
-
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Today's Market Cost</p>
-              <p className="text-3xl font-bold text-red-600">৳{stats?.todayMarketCost || 0}</p>
-              <p className="text-xs text-gray-500 mt-2">Approved entries</p>
-            </div>
-            <ShoppingCart size={40} className="text-red-200" />
+          <div>
+            <button onClick={() => window.location.assign('/market')} className="px-4 py-2 bg-blue-600 text-white rounded-md">New Market</button>
           </div>
-        </Card>
-
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Total Expenses</p>
-              <p className="text-3xl font-bold text-red-600">৳{stats?.totalExpenses || 0}</p>
-              <p className="text-xs text-gray-500 mt-2">This month</p>
-            </div>
-            <TrendingUp size={40} className="text-red-200" />
-          </div>
-        </Card>
-
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Total Collection</p>
-              <p className="text-3xl font-bold text-green-600">৳{stats?.totalCollection || 0}</p>
-              <p className="text-xs text-gray-500 mt-2">From payments</p>
-            </div>
-            <DollarSign size={40} className="text-green-200" />
-          </div>
-        </Card>
-
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm mb-1">Due Amount</p>
-              <p className="text-3xl font-bold text-orange-600">৳{stats?.dueAmount || 0}</p>
-              <p className="text-xs text-gray-500 mt-2">Outstanding</p>
-            </div>
-            <ShoppingCart size={40} className="text-orange-200" />
-          </div>
-        </Card>
+        </div>
       </div>
 
-      {/* Recent Activities */}
-      <Card>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Activities</h2>
-        <div className="space-y-3">
-          {activities.length > 0 ? (
-            activities.map((activity, index) => (
-              <div key={index} className="flex items-center justify-between border-b pb-3 last:border-b-0">
+      {/* Top summary */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-800">{activity.description}</p>
-                  <p className="text-xs text-gray-500">{new Date(activity.created_at).toLocaleDateString()}</p>
+                  <p className="text-gray-600 text-sm mb-1">Total Members</p>
+                  <p className="text-3xl font-bold text-blue-600">{stats?.totalMembers || 0}</p>
+                  <p className="text-xs text-gray-500 mt-2">{stats?.activeMembers || 0} active</p>
                 </div>
-                <span className="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-800 capitalize">
-                  {activity.type}
-                </span>
+                <Users size={34} className="text-blue-200" />
               </div>
-            ))
-          ) : (
-            <p className="text-gray-500">No recent activities</p>
-          )}
+            </Card>
+
+            <Card>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-600 text-sm mb-1">This Month's Meals</p>
+                  <p className="text-3xl font-bold text-indigo-600">{stats?.monthlyMeals || stats?.totalMeals || 0}</p>
+                  <p className="text-xs text-gray-500 mt-2">Total valid meals</p>
+                </div>
+                <TrendingUp size={34} className="text-indigo-200" />
+              </div>
+            </Card>
+
+            <Card>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-600 text-sm mb-1">Total Collection</p>
+                  <p className="text-3xl font-bold text-green-600">৳{stats?.totalCollection || 0}</p>
+                  <p className="text-xs text-gray-500 mt-2">Verified payments only</p>
+                </div>
+                <DollarSign size={34} className="text-green-200" />
+              </div>
+            </Card>
+          </div>
+
+          <Card className="mt-6">
+            <h3 className="text-lg font-semibold mb-4">Monthly Summary</h3>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <p className="text-sm text-gray-500">Approved Market</p>
+                <p className="font-bold">৳{stats?.totalMarketCost || 0}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Total Meals</p>
+                <p className="font-bold">{stats?.totalMeals || 0}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Meal Rate</p>
+                <p className="font-bold">{stats?.ratePerMeal ? `৳${Number(stats.ratePerMeal).toFixed(2)}` : "৳0.00"}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Due Amount</p>
+                <p className="font-bold text-orange-600">৳{stats?.dueAmount || 0}</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Recent Activities */}
+          <Card className="mt-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Activities</h2>
+            <div className="space-y-3">
+              {activities.length > 0 ? (
+                activities.map((activity, index) => (
+                  <div key={index} className="flex items-center justify-between border-b pb-3 last:border-b-0">
+                    <div>
+                      <p className="font-medium text-gray-800">{activity.description}</p>
+                      <p className="text-xs text-gray-500">{new Date(activity.created_at).toLocaleDateString()}</p>
+                    </div>
+                    <span className="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-800 capitalize">
+                      {activity.type}
+                    </span>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No recent activities</p>
+              )}
+            </div>
+          </Card>
         </div>
-      </Card>
+
+        <aside>
+          <Card>
+            <h3 className="font-semibold">Quick Actions</h3>
+            <div className="mt-3 space-y-3">
+              <button onClick={() => window.location.assign('/market')} className="w-full text-left px-3 py-2 bg-blue-50 rounded">Add Market</button>
+              <button onClick={() => window.location.assign('/meals')} className="w-full text-left px-3 py-2 bg-green-50 rounded">Mark Meals</button>
+              <button onClick={() => window.location.assign('/payments')} className="w-full text-left px-3 py-2 bg-yellow-50 rounded">Add Payment</button>
+            </div>
+          </Card>
+
+          <Card className="mt-6">
+            <h3 className="font-semibold">Notices</h3>
+            <div className="mt-3">
+              <p className="text-sm text-gray-500">No notices</p>
+            </div>
+          </Card>
+
+          <Card className="mt-6">
+            <h3 className="font-semibold">Recent Members</h3>
+            <div className="mt-3 space-y-2 text-sm text-gray-700">
+              {stats?.members?.slice?.(0,5)?.map((m:any) => (
+                <div key={m.id} className="flex items-center justify-between">
+                  <div>{m.name || m.full_name || m.email}</div>
+                  <div className="text-xs text-gray-500">{m.room_number || '-'}</div>
+                </div>
+              )) || <div>No members</div>}
+            </div>
+          </Card>
+        </aside>
+      </div>
     </div>
   );
 };

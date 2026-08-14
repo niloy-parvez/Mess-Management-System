@@ -8,7 +8,7 @@ const proxyTarget = apiBaseUrl.replace(/\/api$/, '')
 const isProd = process.env.NODE_ENV === 'production' || process.env.VITE_ENV === 'production';
 
 export default defineConfig({
-  base: isProd ? '/Mess-Management-System/' : '/',
+  base: '/',
   plugins: [react()],
   resolve: {
     alias: {
