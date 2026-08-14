@@ -55,7 +55,8 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./frontend
+          # Deploy from repository root where root index.html and root vite.config.ts exist
+          working-directory: .
           github-comment: false
       - name: Deploy backend to Render
         uses: render-examples/deploy-to-render@v1
