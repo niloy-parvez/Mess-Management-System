@@ -148,7 +148,7 @@ const DashboardPage: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-500">Meal Rate</p>
-                <p className="font-bold">{stats?.ratePerMeal ? `৳${Number(stats.ratePerMeal).toFixed(2)}` : "৳0.00"}</p>
+                <p className="font-bold">{(stats?.ratePerMeal ?? stats?.currentMealRate) ? `৳${Number(stats.ratePerMeal ?? stats?.currentMealRate).toFixed(2)}` : "৳0.00"}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Due Amount</p>

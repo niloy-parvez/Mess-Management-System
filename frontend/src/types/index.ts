@@ -104,6 +104,12 @@ export interface DashboardStats {
   currentMealRate?: number;
   totalDue?: number;
   pendingAmount?: number;
+  // Backwards-compatible aliases and optional fields used by older UI components
+  approvedMarketCost?: number;
+  totalMeals?: number;
+  ratePerMeal?: number;
+  // Optional list of recent members for dashboard widgets
+  members?: Array<Partial<Member> & { name?: string; full_name?: string }>; 
 }
 
 export interface Notification {
